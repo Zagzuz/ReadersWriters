@@ -1,0 +1,4 @@
+#Visual Studio Cmake Project
+.vs/
+out/
+CMakeSettings.json
