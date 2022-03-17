@@ -5,10 +5,12 @@
 #include <string>
 #include <random>
 #include <type_traits>
+#include <mutex>
+
+#include "mutex.h"
 
 
 using event_t = HANDLE;
-using mutex_t = HANDLE;
 using thread_t = HANDLE;
 using thread_id_t = DWORD;
 
@@ -21,8 +23,8 @@ constexpr std::size_t N_THREADS = N_WRITERS + N_READERS;
 event_t w_event;
 static const char* const w_event_name = "WriteCompleted";
 
-static const char* const w_mutex_name = "WriteMutex";
-static const char* const r_mutex_name = "ReadMutex";
+static const std::string w_mutex_name = "WriteMutex";
+static const std::string r_mutex_name = "ReadMutex";
 
 
 struct Person
@@ -34,12 +36,32 @@ struct Person
 inline std::vector<Person> personas = {
 	{ "John", "Smith" },
 	{ "Mary", "Davis" },
+	{ "Lyndon", "Gray" },
+	{ "Sarah", "Dixon" },
+	{ "Rubie", "Davis" },
+	{ "Alina", "Rogers" },
+	{ "Lily", "Carroll" },
+	{ "Alen", "Hawkins" },
+	{ "Alford", "Myers" },
+	{ "Max", "Anderson" },
+	{ "Kellan", "Carter" },
+	{ "Savana", "Rogers" },
+	{ "Oscar", "Edwards" },
+	{ "Sarah", "Spencer" },
+	{ "Rafael", "Gibson" },
 	{ "Jose", "Gonzalez" },
+	{ "Charlie", "Thomas" },
 	{ "Jerry", "Williams" },
 	{ "Michael", "Johnson" },
 	{ "Bertram", "Wooster" },
 	{ "Reginald", "Jeeves" },
-	{ "Augustus", "Fink-Nottle" },
+	{ "Hailey", "Ferguson" },
+	{ "Mike", "Cunningham" },
+	{ "Kelvin", "Sullivan" },
+	{ "Victoria", "Perkins" },
+	{ "Madaline", "Anderson" },
+	{ "Kristian", "Ferguson" },
+	{ "Augustus", "Fink-Nottle" }
 };
 
 
@@ -73,13 +95,8 @@ void reader(void* data)
 	auto ev_wait_res = WaitForSingleObject(ev, INFINITE);
 	if (ev_wait_res != WAIT_OBJECT_0) throw std::exception("Event wait error");
 
-	// create mutex
-	mutex_t m = CreateMutexA(NULL, FALSE, r_mutex_name);
-	if (m == 0) throw std::exception("Mutex create error");
-
-	// mutex lock
-	auto wait_res = WaitForSingleObject(m, INFINITE);
-	if (wait_res != WAIT_OBJECT_0) throw std::exception("Mutex lock error");
+	Mutex m(r_mutex_name);
+	std::lock_guard lock(m);
 
 	// print read data
 	auto person_ptr = static_cast<Person*>(data);
@@ -87,20 +104,12 @@ void reader(void* data)
 		person_ptr->first_name + ' ' + person_ptr->last_name + '\n';
 	std::cout << out;
 	Sleep(SLEEP_TIME);
-
-	// mutex unlock
-	if (!ReleaseMutex(m)) throw std::exception("Mutex release error");
 }
 
 void writer(void* data)
 {
-	// create mutex
-	mutex_t m = CreateMutexA(NULL, FALSE, w_mutex_name);
-	if (m == 0) throw std::exception("Mutex create error");
-
-	// mutex lock
-	auto wait_res = WaitForSingleObject(m, INFINITE);
-	if (wait_res != WAIT_OBJECT_0) throw std::exception("Mutex lock error");
+	Mutex m(w_mutex_name);
+	std::lock_guard lock(m);
 
 	// reset event
 	auto ev = OpenEventA(EVENT_MODIFY_STATE, FALSE, w_event_name);
@@ -118,9 +127,6 @@ void writer(void* data)
 
 	// set event to signaled state
 	if (!SetEvent(ev)) throw std::exception("Can't set event");
-
-	// mutex unlock
-	if (!ReleaseMutex(m)) throw std::exception("Mutex release error");
 }
 
 int main(int argc, char** argv)
