@@ -17,7 +17,7 @@ namespace rw::threads
 	public:
 		Mutex();
 		explicit Mutex(std::string name);
-		void lock();
+		void lock() const;
 		void unlock();
 		void close();
 		static void close(std::string name);

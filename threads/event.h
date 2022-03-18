@@ -18,7 +18,7 @@ namespace rw::threads
 		Event(DWORD access, std::string name);
 		void set();
 		void reset();
-		void wait(DWORD time_ms);
+		void wait(DWORD time_ms) const;
 		void close();
 		static Event create(std::string name);
 		static void close(std::string name);

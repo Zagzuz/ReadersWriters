@@ -46,7 +46,7 @@ namespace rw::threads
 		}
 	}
 
-	void Event::wait(DWORD time_ms)
+	void Event::wait(DWORD time_ms) const
 	{
 		if (WaitForSingleObject(ev_, time_ms) != WAIT_OBJECT_0)
 		{

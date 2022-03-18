@@ -22,7 +22,7 @@ namespace rw::threads
 		}
 	}
 
-	void Mutex::lock()
+	void Mutex::lock() const
 	{
 		auto wait_res = WaitForSingleObject(m_, INFINITE);
 		if (wait_res != WAIT_OBJECT_0)
