@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <mutex>
 
-#include "mutex.h"
+#include "../threads/mutex.h"
 
 
 using event_t = HANDLE;
@@ -95,7 +95,7 @@ void reader(void* data)
 	auto ev_wait_res = WaitForSingleObject(ev, INFINITE);
 	if (ev_wait_res != WAIT_OBJECT_0) throw std::exception("Event wait error");
 
-	Mutex m(r_mutex_name);
+	rw::threads::Mutex m(r_mutex_name);
 	std::lock_guard lock(m);
 
 	// print read data
@@ -108,7 +108,7 @@ void reader(void* data)
 
 void writer(void* data)
 {
-	Mutex m(w_mutex_name);
+	rw::threads::Mutex m(w_mutex_name);
 	std::lock_guard lock(m);
 
 	// reset event
