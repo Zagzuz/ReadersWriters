@@ -7,6 +7,7 @@
 
 #include "../utils/lasterror.h"
 
+
 namespace rw::threads
 {
 	using mutex_t = HANDLE;
@@ -18,6 +19,7 @@ namespace rw::threads
 		explicit Mutex(std::string name);
 		void lock();
 		void unlock();
+		static void close(std::string name);
 	private:
 		mutex_t m_;
 	};

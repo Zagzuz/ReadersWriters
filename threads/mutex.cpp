@@ -14,10 +14,10 @@ namespace rw::threads
 
 	Mutex::Mutex(std::string name)
 	{
-		m_ = CreateMutexA(NULL, FALSE, name.data());
+		m_ = CreateMutexA(NULL, FALSE, TEXT(name.data()));
 		if (!m_)
 		{
-			throw std::runtime_error("Mutex() failed with error: " + \
+			throw std::runtime_error("Mutex(name) failed with error: " + \
 				utils::lasterror());
 		}
 	}
@@ -37,6 +37,21 @@ namespace rw::threads
 		if (!ReleaseMutex(m_))
 		{
 			throw std::runtime_error("Mutex::unlock() failed with error: " + \
+				utils::lasterror());
+		}
+	}
+
+	void Mutex::close(std::string name)
+	{
+		auto m = CreateMutexA(NULL, FALSE, TEXT(name.data()));
+		if (!m)
+		{
+			throw std::runtime_error("Mutex::close(name) failed with error: " + \
+				utils::lasterror());
+		}
+		if (!CloseHandle(m))
+		{
+			throw std::runtime_error("Mutex::close(name) failed with error: " + \
 				utils::lasterror());
 		}
 	}
