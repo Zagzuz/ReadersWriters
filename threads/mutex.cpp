@@ -41,6 +41,15 @@ namespace rw::threads
 		}
 	}
 
+	void Mutex::close()
+	{
+		if (!CloseHandle(m_))
+		{
+			throw std::runtime_error("Mutex::close() failed with error: " + \
+				utils::lasterror());
+		}
+	}
+
 	void Mutex::close(std::string name)
 	{
 		auto m = CreateMutexA(NULL, FALSE, TEXT(name.data()));

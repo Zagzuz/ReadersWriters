@@ -127,7 +127,7 @@ int main(int argc, char** argv)
 
 	assert(threads.size() > 2 && threads.size() == thread_ids.size());
 
-	for (std::remove_const_t<decltype(N_REPEAT)> i = 0; i < N_REPEAT; ++i)
+	for (std::remove_const_t<decltype(N_REPEAT)> i = 0; i <= N_REPEAT; ++i)
 	{
 		auto n_readers = N_READERS;
 		auto n_writers = N_WRITERS;
