@@ -18,6 +18,7 @@ namespace rw::threads
 		template <typename Func, typename Parameters> Thread(Func& f, Parameters& ps);
 		void wait(DWORD time_ms) const;
 		void close();
+		template <class Container> friend void wait_multiple_threads(DWORD time_ms, const Container& threads);
 	private:
 		thread_t t_;
 	};
@@ -31,6 +32,27 @@ namespace rw::threads
 		{
 			throw std::runtime_error("Thread(f, ps) failed with error: " + \
 				utils::lasterror());
+		}
+	}
+
+	template <class Container>
+	void wait_multiple_threads(DWORD time_ms, const Container& threads)
+	{
+		std::vector<thread_t> ts;
+		ts.reserve(threads.size());
+		for (const Thread& thread : threads)
+		{
+			ts.push_back(thread.t_);
+		}
+		WaitForMultipleObjects(static_cast<DWORD>(ts.size()), ts.data(), TRUE, time_ms);
+	}
+
+	template <class Container>
+	void close_multiple_threads(Container& threads)
+	{
+		for (Thread& thread : threads)
+		{
+			thread.close();
 		}
 	}
 } // namespace rw::threads
