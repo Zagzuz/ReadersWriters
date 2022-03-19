@@ -13,7 +13,7 @@ namespace rw::threads
 		}
 	}
 
-	Mutex::Mutex(std::string name)
+	Mutex::Mutex(const std::string& name)
 	{
 		m_ = CreateMutexA(NULL, FALSE, TEXT(name.data()));
 		if (!m_)
@@ -51,7 +51,7 @@ namespace rw::threads
 		}
 	}
 
-	void Mutex::close(std::string name)
+	void Mutex::close(const std::string& name)
 	{
 		auto m = CreateMutexA(NULL, FALSE, TEXT(name.data()));
 		if (!m)

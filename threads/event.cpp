@@ -3,7 +3,7 @@
 
 namespace rw::threads
 {
-	Event::Event(DWORD access, std::string name)
+	Event::Event(DWORD access, const std::string& name)
 	{
 		ev_ = OpenEventA(access, FALSE, TEXT(name.data()));
 		if (!ev_)
@@ -18,7 +18,7 @@ namespace rw::threads
 		}
 	}
 
-	Event Event::create(std::string name)
+	Event Event::create(const std::string& name)
 	{
 		Event res(CreateEventA(NULL, TRUE, FALSE, TEXT(name.data())));
 		if (!res.ev_)
@@ -65,7 +65,7 @@ namespace rw::threads
 		}
 	}
 
-	void Event::close(std::string name)
+	void Event::close(const std::string& name)
 	{
 		auto ev_ = OpenEventA(EVENT_MODIFY_STATE, FALSE, TEXT(name.data()));
 		if (!ev_)

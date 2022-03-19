@@ -15,13 +15,13 @@ namespace rw::threads
 	class Event
 	{
 	public:
-		Event(DWORD access, std::string name);
+		Event(DWORD access, const std::string& name);
 		void set();
 		void reset();
 		void wait(DWORD time_ms) const;
 		void close();
-		static Event create(std::string name);
-		static void close(std::string name);
+		static Event create(const std::string& name);
+		static void close(const std::string& name);
 	private:
 		explicit Event(event_t ev) : ev_(ev) {}
 

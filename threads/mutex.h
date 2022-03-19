@@ -16,11 +16,11 @@ namespace rw::threads
 	{
 	public:
 		Mutex();
-		explicit Mutex(std::string name);
+		explicit Mutex(const std::string& name);
 		void lock() const;
 		void unlock();
 		void close();
-		static void close(std::string name);
+		static void close(const std::string& name);
 	private:
 		mutex_t m_;
 	};
