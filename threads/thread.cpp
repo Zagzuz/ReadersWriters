@@ -1,5 +1,6 @@
 #include "thread.h"
 
+
 namespace rw::threads
 {
 	void Thread::close()

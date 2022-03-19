@@ -1,5 +1,6 @@
 #include "event.h"
 
+
 namespace rw::threads
 {
 	Event::Event(DWORD access, std::string name)
