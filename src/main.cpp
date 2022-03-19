@@ -1,5 +1,3 @@
-#include <windows.h>
-#include <cassert>
 #include <vector> 
 #include <iostream>
 #include <string>
@@ -12,10 +10,7 @@
 #include "../utils/rand.h"
 
 
-using thread_t = HANDLE;
-using thread_id_t = DWORD;
-
-constexpr std::size_t N_REPEAT = 0;
+constexpr std::size_t N_REPEAT = 2;
 constexpr std::size_t N_WRITERS = 10;
 constexpr std::size_t N_READERS = 20;
 constexpr std::size_t SLEEP_TIME = 0'000;
@@ -99,19 +94,15 @@ void writer(void* data)
 
 int main(int argc, char** argv)
 {
-	std::vector<rw::threads::Thread> threads;
-	threads.reserve(N_THREADS);
-	Person p{ "Andrew", "Anderson" };
-
 	for (std::remove_const_t<decltype(N_REPEAT)> i = 0; i <= N_REPEAT; ++i)
 	{
-		for (std::size_t i = 0; i < N_WRITERS; ++i)
+		std::cout << i + 1 << " run\n";
+		std::vector<rw::threads::Thread> threads;
+		threads.reserve(N_THREADS);
+		Person p{ "Andrew", "Anderson" };
+		for (std::remove_const_t<decltype(N_THREADS)> j = 0; j < N_THREADS; ++j)
 		{
-			threads.emplace_back(writer, p);
-		}
-		for (std::size_t i = 0; i < N_READERS; ++i)
-		{
-			threads.emplace_back(reader, p);
+			threads.emplace_back(j < N_READERS ? reader : writer, p);
 		}
 		rw::threads::wait_multiple_threads(INFINITE, threads);
 		rw::threads::close_multiple_threads(threads);
