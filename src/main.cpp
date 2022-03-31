@@ -4,10 +4,10 @@
 #include <type_traits>
 #include <mutex>
 
-#include "../threads/mutex.h"
-#include "../threads/event.h"
-#include "../threads/thread.h"
-#include "../utils/rand.h"
+#include "threads/mutex.h"
+#include "threads/event.h"
+#include "threads/thread.h"
+#include "utils/rand.h"
 
 
 constexpr std::size_t N_REPEAT = 2;
