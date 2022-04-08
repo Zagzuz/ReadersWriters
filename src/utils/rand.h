@@ -6,7 +6,7 @@
 
 namespace rw::utils
 {
-	bool toss()
+	inline bool toss()
 	{
 		static std::random_device rd;
 		static std::mt19937 gen(rd());
@@ -15,7 +15,7 @@ namespace rw::utils
 	}
 
 	template <class Container>
-	typename Container::value_type get_random(const Container& c)
+	inline typename Container::value_type get_random(const Container& c)
 	{
 		if (c.empty()) return {};
 		static std::random_device rd;

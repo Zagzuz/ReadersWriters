@@ -8,7 +8,7 @@ namespace rw::utils
 {
     inline std::string lasterror()
     {
-        LPVOID lpMsgBuf;
+        LPVOID lpMsgBuf = nullptr;
         DWORD dw = GetLastError();
 
         FormatMessage(
