@@ -9,5 +9,6 @@ constexpr std::size_t N_THREADS = N_WRITERS + N_READERS;
 static const std::string r_mutex_name = "ReadMutex";
 static const std::string w_mutex_name = "WriteMutex";
 static const std::string w_event_name = "WriteCompleted";
+static const std::string data_path = "../../../../data/personas.txt";
 
 #endif // CONFIG_H

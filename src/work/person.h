@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 
 namespace rw::work
@@ -11,38 +12,31 @@ namespace rw::work
 	{
 		std::string first_name;
 		std::string last_name;
+		Person(std::string f, std::string l) : 
+			first_name(f), last_name(l) {};
+		Person() : Person("First_name", "Last_name") {};
 	};
 
-	inline std::vector<Person> personas = {
-		{ "John", "Smith" },
-		{ "Mary", "Davis" },
-		{ "Lyndon", "Gray" },
-		{ "Sarah", "Dixon" },
-		{ "Rubie", "Davis" },
-		{ "Alina", "Rogers" },
-		{ "Lily", "Carroll" },
-		{ "Alen", "Hawkins" },
-		{ "Alford", "Myers" },
-		{ "Max", "Anderson" },
-		{ "Kellan", "Carter" },
-		{ "Savana", "Rogers" },
-		{ "Oscar", "Edwards" },
-		{ "Sarah", "Spencer" },
-		{ "Rafael", "Gibson" },
-		{ "Jose", "Gonzalez" },
-		{ "Charlie", "Thomas" },
-		{ "Jerry", "Williams" },
-		{ "Michael", "Johnson" },
-		{ "Bertram", "Wooster" },
-		{ "Reginald", "Jeeves" },
-		{ "Hailey", "Ferguson" },
-		{ "Mike", "Cunningham" },
-		{ "Kelvin", "Sullivan" },
-		{ "Victoria", "Perkins" },
-		{ "Madaline", "Anderson" },
-		{ "Kristian", "Ferguson" },
-		{ "Augustus", "Fink-Nottle" }
-	};
+	inline std::vector<Person> personas()
+	{
+		static std::vector<Person> ps;
+		if (ps.empty())
+		{
+			std::ifstream fin(data_path);
+			if (fin.is_open())
+			{
+				std::string first_name, last_name;
+				while (fin >> first_name >> last_name)
+					ps.emplace_back(first_name, last_name);
+				fin.close();
+			}
+			else
+			{
+				throw std::runtime_error("'personas.txt' not found");
+			}
+		}
+		return ps;
+	}
 } // namespace rw::work
 
 #endif // WORK_PERSON_H

@@ -9,7 +9,7 @@ namespace rw::work
 		{
 			std::cout << i + 1 << " run\n";
 			threads_.reserve(N_THREADS);
-			Person p{ "Andrew", "Anderson" };
+			Person p;
 			for (std::remove_const_t<decltype(N_THREADS)> j = 0; j < N_THREADS; ++j)
 				threads_.emplace_back(j < N_READERS ? writer : reader, p);
 			rw::threads::wait_multiple_threads_completion(threads_);
